@@ -8,7 +8,7 @@
   <!-- Favicon -->
   <link rel="icon" href="images/favicon.png" type="image/png">
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Roboto+Mono:wght@300&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -18,6 +18,7 @@
     body {
       font-family: 'Playfair Display', serif;
       cursor: none; /* Hide default cursor */
+      overflow-x: hidden;
     }
 
     .cursor {
@@ -26,26 +27,56 @@
       left: 0;
       right: 0;
       bottom: 0;
-      width: 60px; /* Increase size to make the blob larger */
+      width: 60px;
       height: 60px;
-      background: rgb(255, 255, 255); /* Light grey background */
-      border-radius: 50%; /* Keep it circular */
+      background: rgb(255, 255, 255);
+      border-radius: 50%;
       pointer-events: none;
       transform: translate(-50%, -50%);
       transition: transform 0.03s ease-out;
       mix-blend-mode: difference;
-      box-shadow: 0 0 60px rgba(255, 255, 255, 0.4); /* Larger, softer glow */
-      filter: blur(25px); /* Apply blur to make the blob edge soft */
+      box-shadow: 0 0 60px rgba(255, 255, 255, 0.4);
+      filter: blur(25px);
+      z-index: 50;
+    }
+
+    /* Coming Soon Background Animation */
+    .coming-soon-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .coming-soon-line {
+      position: absolute;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.5rem;
+      color: rgba(255, 255, 255, 0.09);
+      white-space: nowrap;
+      animation: moveText linear infinite;
+    }
+
+    @keyframes moveText {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(100vw); }
     }
   </style>
 </head>
 <body class="bg-black text-white min-h-screen flex flex-col items-center justify-center relative px-4">
 
+  <!-- Coming Soon Background -->
+  <div class="coming-soon-bg" id="comingSoonBg"></div>
+
   <!-- Custom Cursor -->
   <div class="cursor" id="cursor"></div>
 
   <!-- Content -->
-  <div class="text-center w-full">
+  <div class="text-center w-full z-10 relative">
     <!-- Name -->
     <h1 class="text-5xl font-semibold mb-8 tracking-wide break-words overflow-hidden leading-tight">
       Ammar Bagasrawala
@@ -53,13 +84,13 @@
     
     <!-- Contact Info -->
     <div class="flex flex-col items-center space-y-6 sm:space-y-0 sm:flex-row sm:justify-center sm:space-x-8 text-lg font-light">
-      <!-- Email with logo -->
+      <!-- Email with logo and mailto -->
       <div class="flex items-center space-x-2">
         <!-- Alternate Email SVG Logo -->
         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="24" height="24" class="text-white">
           <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 2-8 5-8-5h16zm-16 12V8l8 5 8-5v10H4z"></path>
         </svg>
-        <span>ammariddris@gmail.com</span>
+        <a href="mailto:ammariddris@gmail.com" class="hover:text-gray-400">ammariddris@gmail.com</a>
       </div>
       
       <!-- Phone -->
@@ -90,6 +121,27 @@
       const { clientX, clientY } = e;
       cursor.style.transform = `translate(${clientX}px, ${clientY}px)`;
     });
+
+    // Coming Soon Background
+    const comingSoonBg = document.getElementById('comingSoonBg');
+    const windowHeight = window.innerHeight;
+    const windowWidth = window.innerWidth;
+
+    // Create multiple lines of "Coming Soon"
+    for (let i = 0; i < 20; i++) {
+      const line = document.createElement('div');
+      line.classList.add('coming-soon-line');
+      line.textContent = 'COMING SOON • '.repeat(8);
+      
+      // Randomize vertical position and animation duration
+      const verticalPosition = Math.random() * windowHeight;
+      const animationDuration = 20 + Math.random() * 10; // between 20-30 seconds
+      
+      line.style.top = `${verticalPosition}px`;
+      line.style.animationDuration = `${animationDuration}s`;
+      
+      comingSoonBg.appendChild(line);
+    }
   </script>
 </body>
 </html>

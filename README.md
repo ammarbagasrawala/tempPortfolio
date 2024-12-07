@@ -1,3 +1,3 @@
 # Hey Ammar welcome back 
 
-this is the temporary placeholder for your upcoming portfolio website
+here you have to make a good portfolio and then later merge it with the main branch
